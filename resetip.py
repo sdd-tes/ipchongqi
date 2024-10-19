@@ -1,5 +1,6 @@
 #不同的路由器可能id不一样
 #这是大部分通用的
+import configparser
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -7,9 +8,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+
+username_str = config['credentials']['username']
+password_str = config['credentials']['password']
+router_url = config['router']['url']
+
+
 driver = webdriver.Chrome()
-driver.get("http://192.168.1.1")
-print("浏览器已打开，正在访问路由器页面...")
+driver.get(router_url)
+print(f"浏览器已打开，正在访问路由器页面: {router_url}")
 
 try:
 
@@ -25,9 +36,9 @@ try:
     print("已找到密码输入框")
 
 
-    username.send_keys("useradmin")
-    password.send_keys("sdddddc")
-    print("已输入用户名和密码")
+    username.send_keys(username_str)
+    password.send_keys(password_str)
+    print(f"已输入用户名和密码: {username_str}")
 
 
     submit_button = WebDriverWait(driver, 10).until(
